@@ -1442,7 +1442,7 @@ export default function AnalysisPage() {
                         {item.cpmRank ? `#${item.cpmRank}` : '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                        {item.costRatio > 0 ? `${item.costRatio.toFixed(1)}%` : '-'}
+                        {item.costRatio && item.costRatio > 0 ? `${item.costRatio.toFixed(1)}%` : '-'}
                       </td>
                     </tr>
                   );
