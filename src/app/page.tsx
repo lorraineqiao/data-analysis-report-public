@@ -100,32 +100,33 @@ export default function AnalysisPage() {
       
       const imageData = canvas.toDataURL('image/png');
       
-      // 上传截图
-      const uploadRes = await fetch('/api/screenshot', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageData,
-          filename: `chart_${Date.now()}.png`,
-        }),
-      });
-      
-      const uploadData = await uploadRes.json();
-      
-      // 发送使用记录到对象存储
-      if (userInfo?.agentName) {
-        fetch('/api/usage-log', {
+      // 上传截图（失败也继续，不影响后续记录）
+      let screenshotUrl = '';
+      try {
+        const uploadRes = await fetch('/api/screenshot', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            agentName: userInfo.agentName,
-            channelManager: userInfo.channelManager,
-            summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
-            screenshotUrl: uploadData.url || '',
+            imageData,
+            filename: `chart_${Date.now()}.png`,
           }),
-        }).catch(() => {});
-      }
-      
+        });
+        const uploadData = await uploadRes.json();
+        screenshotUrl = uploadData.url || '';
+      } catch {}
+
+      // 无论截图是否成功，都记录使用
+      fetch('/api/usage-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agentName: userInfo?.agentName || '未知',
+          channelManager: userInfo?.channelManager || '未知',
+          summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
+          screenshotUrl,
+        }),
+      }).catch(() => {});
+
       console.log('Screenshot captured and uploaded');
     } catch (err) {
       console.error('Capture error:', err);
