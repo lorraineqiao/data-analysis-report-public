@@ -70,6 +70,8 @@ export async function POST(request: NextRequest) {
       screenshotUrl: screenshotUrl || "",
     };
 
+    console.log('Usage record received:', newRecord);
+
     // 获取现有记录
     const records = await getUsageRecords();
 
@@ -87,13 +89,14 @@ export async function POST(request: NextRequest) {
       });
     } else {
       return NextResponse.json(
-        { success: false, error: "保存失败" },
+        { success: false, error: "保存失败", details: "JSONBin PUT返回非200" },
         { status: 500 }
       );
     }
   } catch (error) {
+    console.error('Usage log error:', error);
     return NextResponse.json(
-      { success: false, error: "服务器错误" },
+      { success: false, error: "服务器错误", details: String(error) },
       { status: 500 }
     );
   }
