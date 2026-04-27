@@ -75,17 +75,24 @@ export default function AnalysisPage() {
   const captureAndUpload = async (data: ChartData[], name: string) => {
     // 无论chartRef是否存在，都先记录使用
     console.log('Recording usage for:', name);
+    
+    // 保存到变量
+    const infoToSave = {
+      agentName: userInfo?.agentName || '未知',
+      channelManager: userInfo?.channelManager || '未知',
+      summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
+    };
+    console.log('Saving info:', infoToSave);
+    
     fetch('/api/usage-log', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        agentName: userInfo?.agentName || '未知',
-        channelManager: userInfo?.channelManager || '未知',
-        summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
-        screenshotUrl: '',
-      }),
+      body: JSON.stringify(infoToSave),
     }).then(res => {
       console.log('Usage log response:', res.status);
+      if (res.ok) {
+        alert('使用记录已保存到JSONBin！');
+      }
     }).catch(err => {
       console.error('Usage log error:', err);
     });
