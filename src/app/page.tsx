@@ -62,6 +62,7 @@ export default function AnalysisPage() {
   const [isLiked, setIsLiked] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
+  const [testStatus, setTestStatus] = useState('');
   
   // 用户信息弹窗 - 默认显示
   const [showUserInfoModal, setShowUserInfoModal] = useState(true);
@@ -190,6 +191,26 @@ export default function AnalysisPage() {
       }
     } catch (err) {
       console.error('点赞失败:', err);
+    }
+  };
+  
+  // 测试JSONBin记录功能
+  const testJsonBinRecord = async () => {
+    setTestStatus('测试中...');
+    try {
+      const res = await fetch('/api/usage-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agentName: userInfo?.agentName || '游客',
+          channelManager: userInfo?.channelManager || '未知',
+          summary: '页面独立测试',
+        }),
+      });
+      const data = await res.json();
+      setTestStatus(data.success ? '测试成功！' : '测试失败: ' + JSON.stringify(data));
+    } catch (err) {
+      setTestStatus('测试失败: ' + String(err));
     }
   };
   
@@ -441,6 +462,13 @@ export default function AnalysisPage() {
               )}
             </div>
             <div className="flex items-center gap-3">
+              {/* 测试JSONBin记录 */}
+              <button
+                onClick={testJsonBinRecord}
+                className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm font-medium"
+              >
+                测试记录{testStatus && `: ${testStatus}`}
+              </button>
               <button
                 onClick={() => {
                   // 先清除API状态
