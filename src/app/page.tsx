@@ -73,6 +73,24 @@ export default function AnalysisPage() {
   
   // 截图并上传函数
   const captureAndUpload = async (data: ChartData[], name: string) => {
+    // 无论chartRef是否存在，都先记录使用
+    console.log('Recording usage for:', name);
+    fetch('/api/usage-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agentName: userInfo?.agentName || '未知',
+        channelManager: userInfo?.channelManager || '未知',
+        summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
+        screenshotUrl: '',
+      }),
+    }).then(res => {
+      console.log('Usage log response:', res.status);
+    }).catch(err => {
+      console.error('Usage log error:', err);
+    });
+
+    // 截图部分
     if (!chartRef.current) return;
     
     setIsCapturing(true);
@@ -114,18 +132,6 @@ export default function AnalysisPage() {
         const uploadData = await uploadRes.json();
         screenshotUrl = uploadData.url || '';
       } catch {}
-
-      // 无论截图是否成功，都记录使用
-      fetch('/api/usage-log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          agentName: userInfo?.agentName || '未知',
-          channelManager: userInfo?.channelManager || '未知',
-          summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
-          screenshotUrl,
-        }),
-      }).catch(() => {});
 
       console.log('Screenshot captured and uploaded');
     } catch (err) {
