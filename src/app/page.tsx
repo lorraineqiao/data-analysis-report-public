@@ -503,6 +503,17 @@ export default function AnalysisPage() {
                     setChartData([]); // 清空旧数据
                     setDataSource('template');
                     setHasData(true);
+                    
+                    // 选择"未有数据"时记录
+                    fetch('/api/usage-log', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        agentName: userInfo?.agentName || '未知',
+                        channelManager: userInfo?.channelManager || '未知',
+                        summary: `使用"未有数据"功能`,
+                      }),
+                    });
                   }}
                   className="flex flex-col items-center gap-3 p-6 bg-white rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 border-2 border-transparent transition-all min-w-[200px]"
                 >
@@ -516,7 +527,20 @@ export default function AnalysisPage() {
                 </button>
                 
                 <button
-                  onClick={() => setDataSource('upload')}
+                  onClick={() => {
+                    setDataSource('upload');
+                    
+                    // 选择"已有数据"时记录
+                    fetch('/api/usage-log', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        agentName: userInfo?.agentName || '未知',
+                        channelManager: userInfo?.channelManager || '未知',
+                        summary: `使用"已有数据"上传功能`,
+                      }),
+                    });
+                  }}
                   className="flex flex-col items-center gap-3 p-6 bg-white rounded-xl shadow-sm hover:shadow-md hover:border-emerald-300 border-2 border-transparent transition-all min-w-[200px]"
                 >
                   <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
