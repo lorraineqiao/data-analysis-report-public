@@ -336,10 +336,21 @@ export default function AnalysisPage() {
       setFileName('手动填写');
       setHasData(true);
       
-      // 手动填写数据后也触发记录
-      setTimeout(() => {
-        captureAndUpload(newChartData, '手动填写');
-      }, 100);
+      // 直接记录使用（不依赖截图）
+      const recordData = {
+        agentName: userInfo?.agentName || '未知',
+        channelManager: userInfo?.channelManager || '未知',
+        summary: `手动填写数据，生成 ${newChartData.length} 条数据`,
+      };
+      console.log('记录数据:', recordData);
+      fetch('/api/usage-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(recordData),
+      }).then(res => {
+        console.log('记录响应:', res.status);
+        if (res.ok) alert('数据已记录!');
+      }).catch(err => console.error('记录失败:', err));
     }
   }, [liveChannels, videoChannels, searchChannels, dataSource]);
 
@@ -881,6 +892,23 @@ export default function AnalysisPage() {
                     setHasCustomData(true);
                     setFileName(name);
                     setHasData(true);
+                    
+                    // 直接记录使用（不依赖截图）
+                    const recordData = {
+                      agentName: userInfo?.agentName || '未知',
+                      channelManager: userInfo?.channelManager || '未知',
+                      summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
+                    };
+                    console.log('记录数据:', recordData);
+                    fetch('/api/usage-log', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(recordData),
+                    }).then(res => {
+                      console.log('记录响应:', res.status);
+                      if (res.ok) alert('数据已记录!');
+                    }).catch(err => console.error('记录失败:', err));
+                    
                     // 截图并记录数据生成
                     captureAndUpload(data, name);
                   }
