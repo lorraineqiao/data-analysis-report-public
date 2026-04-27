@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
 // 使用用户创建的Bin
-const DEFAULT_BIN_ID = "69ef2f6236566621a8f7b983";
+const DEFAULT_BIN_ID = "69ef40c636566621a8f8198d";
 
 interface UsageRecord {
   date: string;
