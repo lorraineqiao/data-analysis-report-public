@@ -40,10 +40,11 @@ async function getUsageRecords(): Promise<UsageRecord[]> {
 }
 
 // 保存使用记录
-async function saveUsageRecords(records: UsageRecord[]): Promise<boolean> {
+async function saveUsageRecords(records: UsageRecord[]): Promise<{success: boolean; response?: any}> {
   try {
     const binId = getBinId();
-    const response = await fetch(`${JSONBIN_BASE_URL}${binId}`, {
+    const url = `${JSONBIN_BASE_URL}${binId}`;
+    const response = await fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -51,9 +52,17 @@ async function saveUsageRecords(records: UsageRecord[]): Promise<boolean> {
       },
       body: JSON.stringify({ records }),
     });
-    return response.ok;
-  } catch {
-    return false;
+    
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('JSONBin PUT failed:', response.status, text);
+      return { success: false, response: { status: response.status, text } };
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error('JSONBin PUT error:', error);
+    return { success: false, response: String(error) };
   }
 }
 
@@ -79,9 +88,9 @@ export async function POST(request: NextRequest) {
     records.push(newRecord);
 
     // 保存记录
-    const success = await saveUsageRecords(records);
+    const result = await saveUsageRecords(records);
 
-    if (success) {
+    if (result.success) {
       return NextResponse.json({
         success: true,
         message: "使用记录已保存",
@@ -89,7 +98,7 @@ export async function POST(request: NextRequest) {
       });
     } else {
       return NextResponse.json(
-        { success: false, error: "保存失败", details: "JSONBin PUT返回非200" },
+        { success: false, error: "保存失败", details: result.response },
         { status: 500 }
       );
     }
