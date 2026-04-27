@@ -65,7 +65,7 @@ export default function AnalysisPage() {
   
   // 用户信息弹窗 - 默认显示
   const [showUserInfoModal, setShowUserInfoModal] = useState(true);
-  const [userInfo, setUserInfo] = useState<{ agentName: string; managerName: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<{ agentName: string; channelManager: string } | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   
   // 图表容器ref
@@ -1452,8 +1452,8 @@ export default function AnalysisPage() {
       <UserInfoModal
         isOpen={showUserInfoModal}
         onClose={() => setShowUserInfoModal(false)}
-        onSubmit={(agentName: string, managerName: string) => {
-          const info = { agentName, managerName };
+        onSubmit={(agentName: string, channelManager: string) => {
+          const info = { agentName, channelManager };
           localStorage.setItem('userInfo', JSON.stringify(info));
           setUserInfo(info);
           setShowUserInfoModal(false);
