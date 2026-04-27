@@ -505,14 +505,25 @@ export default function AnalysisPage() {
                     setHasData(true);
                     
                     // 选择"未有数据"时记录
+                    const bodyData = {
+                      agentName: userInfo?.agentName || '未知',
+                      channelManager: userInfo?.channelManager || '未知',
+                      summary: `使用"未有数据"功能`,
+                    };
+                    console.log('点击"未有数据"按钮，记录:', bodyData);
+                    
                     fetch('/api/usage-log', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        agentName: userInfo?.agentName || '未知',
-                        channelManager: userInfo?.channelManager || '未知',
-                        summary: `使用"未有数据"功能`,
-                      }),
+                      body: JSON.stringify(bodyData),
+                    }).then(res => {
+                      console.log('响应状态:', res.status);
+                      if (res.ok) {
+                        alert('记录成功！请查看JSONBin');
+                      }
+                    }).catch(err => {
+                      console.error('记录失败:', err);
+                      alert('记录失败: ' + err);
                     });
                   }}
                   className="flex flex-col items-center gap-3 p-6 bg-white rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 border-2 border-transparent transition-all min-w-[200px]"
@@ -531,14 +542,25 @@ export default function AnalysisPage() {
                     setDataSource('upload');
                     
                     // 选择"已有数据"时记录
+                    const bodyData = {
+                      agentName: userInfo?.agentName || '未知',
+                      channelManager: userInfo?.channelManager || '未知',
+                      summary: `使用"已有数据"上传功能`,
+                    };
+                    console.log('点击"已有数据"按钮，记录:', bodyData);
+                    
                     fetch('/api/usage-log', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        agentName: userInfo?.agentName || '未知',
-                        channelManager: userInfo?.channelManager || '未知',
-                        summary: `使用"已有数据"上传功能`,
-                      }),
+                      body: JSON.stringify(bodyData),
+                    }).then(res => {
+                      console.log('响应状态:', res.status);
+                      if (res.ok) {
+                        alert('记录成功！请查看JSONBin');
+                      }
+                    }).catch(err => {
+                      console.error('记录失败:', err);
+                      alert('记录失败: ' + err);
                     });
                   }}
                   className="flex flex-col items-center gap-3 p-6 bg-white rounded-xl shadow-sm hover:shadow-md hover:border-emerald-300 border-2 border-transparent transition-all min-w-[200px]"
