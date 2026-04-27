@@ -1538,6 +1538,18 @@ export default function AnalysisPage() {
               </svg>
               <span className="font-medium">报错</span>
             </button>
+            
+            {/* 测试JSONBin记录按钮 */}
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/test-jsonbin', { method: 'POST' });
+                const data = await res.json();
+                alert('测试结果: ' + JSON.stringify(data));
+              }}
+              className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+            >
+              <span className="font-medium">测试记录</span>
+            </button>
           </div>
           
           <div className="text-center text-sm text-gray-400">
