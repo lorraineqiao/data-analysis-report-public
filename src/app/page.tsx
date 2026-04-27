@@ -321,6 +321,11 @@ export default function AnalysisPage() {
       setHasCustomData(true);
       setFileName('手动填写');
       setHasData(true);
+      
+      // 手动填写数据后也触发记录
+      setTimeout(() => {
+        captureAndUpload(newChartData, '手动填写');
+      }, 100);
     }
   }, [liveChannels, videoChannels, searchChannels, dataSource]);
 
