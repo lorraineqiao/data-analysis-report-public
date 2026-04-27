@@ -112,20 +112,15 @@ export default function AnalysisPage() {
       
       const uploadData = await uploadRes.json();
       
-      // 发送带截图的数据到飞书
-      fetch('/api/lark-usage-log', {
+      // 发送使用记录到对象存储
+      fetch('/api/usage-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action_type: 'data_generated',
-          userInfo: userInfo,
-          data_summary: {
-            rows: data.length,
-            fileName: name,
-            date: new Date().toISOString(),
-            userInfo: userInfo,
-            screenshotUrl: uploadData.url || '截图生成失败',
-          },
+          agentName: userInfo.agentName,
+          channelManager: userInfo.channelManager,
+          summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
+          screenshotUrl: uploadData.url || '',
         }),
       }).catch(() => {});
       
@@ -147,17 +142,7 @@ export default function AnalysisPage() {
     setShowUserInfoModal(true);
     setUserInfo(parsedUserInfo);
     
-    fetch('/api/lark-usage-log', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action_type: 'page_view',
-        userInfo: parsedUserInfo,
-        data_summary: { 
-          path: window.location.pathname
-        }
-      })
-    }).catch(() => {});
+    // 页面访问记录已移除，改为在提交数据时记录
   }, []);
 
   // 获取点赞数
