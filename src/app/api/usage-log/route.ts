@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
-// 使用一个公共Bin ID来存储数据
-const DEFAULT_BIN_ID = "67f8c8e8ace6af77a9e2b456";
+// 使用用户创建的Bin
+const DEFAULT_BIN_ID = "69ef29d536566621a8f79a87";
 
 interface UsageRecord {
   date: string;
