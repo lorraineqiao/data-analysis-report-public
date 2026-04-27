@@ -113,16 +113,18 @@ export default function AnalysisPage() {
       const uploadData = await uploadRes.json();
       
       // 发送使用记录到对象存储
-      fetch('/api/usage-log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          agentName: userInfo.agentName,
-          channelManager: userInfo.channelManager,
-          summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
-          screenshotUrl: uploadData.url || '',
-        }),
-      }).catch(() => {});
+      if (userInfo?.agentName) {
+        fetch('/api/usage-log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agentName: userInfo.agentName,
+            channelManager: userInfo.channelManager,
+            summary: `上传Excel文件 ${name}，生成 ${data.length} 条数据`,
+            screenshotUrl: uploadData.url || '',
+          }),
+        }).catch(() => {});
+      }
       
       console.log('Screenshot captured and uploaded');
     } catch (err) {
