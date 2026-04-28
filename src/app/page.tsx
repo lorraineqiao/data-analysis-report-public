@@ -91,7 +91,7 @@ export default function AnalysisPage() {
     }).then(res => {
       console.log('Usage log response:', res.status);
       if (res.ok) {
-        alert('使用记录已保存到JSONBin！');
+
       }
     }).catch(err => {
       console.error('Usage log error:', err);
@@ -516,11 +516,11 @@ export default function AnalysisPage() {
                     }).then(res => {
                       console.log('响应状态:', res.status);
                       if (res.ok) {
-                        alert('记录成功！请查看JSONBin');
+
                       }
                     }).catch(err => {
                       console.error('记录失败:', err);
-                      alert('记录失败: ' + err);
+
                     });
                   }}
                   className="flex flex-col items-center gap-3 p-6 bg-white rounded-xl shadow-sm hover:shadow-md hover:border-violet-300 border-2 border-transparent transition-all min-w-[200px]"
@@ -553,11 +553,11 @@ export default function AnalysisPage() {
                     }).then(res => {
                       console.log('响应状态:', res.status);
                       if (res.ok) {
-                        alert('记录成功！请查看JSONBin');
+
                       }
                     }).catch(err => {
                       console.error('记录失败:', err);
-                      alert('记录失败: ' + err);
+
                     });
                   }}
                   className="flex flex-col items-center gap-3 p-6 bg-white rounded-xl shadow-sm hover:shadow-md hover:border-emerald-300 border-2 border-transparent transition-all min-w-[200px]"
@@ -1584,7 +1584,7 @@ export default function AnalysisPage() {
               onClick={async () => {
                 const res = await fetch('/api/test-jsonbin', { method: 'POST' });
                 const data = await res.json();
-                alert('测试结果: ' + JSON.stringify(data));
+
               }}
               className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
             >
