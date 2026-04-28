@@ -24,11 +24,7 @@ function getBinId() {
 async function getUsageRecords(): Promise<UsageRecord[]> {
   try {
     const binId = getBinId();
-    const response = await fetch(`${JSONBIN_BASE_URL}${binId}/latest`, {
-      headers: {
-        "X-Access-Key": "$2a$10$WlVJwk5pZpm2aTEPaahLuuE7Mcg5J5CMYIj1xOYhL2FwRT0N1RduG",
-      },
-    });
+    const response = await fetch(`${JSONBIN_BASE_URL}${binId}/latest`);
     if (!response.ok) {
       return [];
     }
@@ -48,7 +44,6 @@ async function saveUsageRecords(records: UsageRecord[]): Promise<{success: boole
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Access-Key": "$2a$10$WlVJwk5pZpm2aTEPaahLuuE7Mcg5J5CMYIj1xOYhL2FwRT0N1RduG",
       },
       body: JSON.stringify({ records }),
     });
