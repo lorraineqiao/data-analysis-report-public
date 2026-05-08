@@ -57,9 +57,6 @@ export default function AnalysisPage() {
   const [dataSource, setDataSource] = useState<'none' | 'template' | 'upload'>('none');
   const [hasData, setHasData] = useState(false);
   
-  // 点赞功能
-  const [likeCount, setLikeCount] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
 
@@ -161,38 +158,6 @@ export default function AnalysisPage() {
     // 页面访问记录已移除，改为在提交数据时记录
   }, []);
 
-  // 获取点赞数
-  useEffect(() => {
-    fetch('/api/likes?page_key=homepage')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setLikeCount(data.like_count);
-        }
-      })
-      .catch(console.error);
-  }, []);
-  
-  // 处理点赞
-  const handleLike = async () => {
-    if (isLiked) return;
-    
-    try {
-      const res = await fetch('/api/likes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ page_key: 'homepage' }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setLikeCount(data.like_count);
-        setIsLiked(true);
-      }
-    } catch (err) {
-      console.error('点赞失败:', err);
-    }
-  };
-  
   // Step1 数据
   const [step1Data, setStep1Data] = useState({
     historyAmount: 0,
@@ -1551,23 +1516,6 @@ export default function AnalysisPage() {
         <div className="container mx-auto px-4">
           {/* 底部操作按钮 */}
           <div className="flex justify-center gap-4 mb-6">
-            {/* 点赞按钮 */}
-            <button
-              onClick={handleLike}
-              disabled={isLiked}
-              className={`px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 ${
-                isLiked 
-                  ? 'bg-pink-500 text-white cursor-default' 
-                  : 'bg-gradient-to-r from-pink-400 to-rose-500 text-white hover:scale-105'
-              }`}
-            >
-              <svg className="w-5 h-5" fill={isLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span className="font-medium">{isLiked ? '已点赞' : '太好用了！点赞！'}</span>
-              <span className="bg-white/20 px-2 py-0.5 rounded-full text-sm">{likeCount}</span>
-            </button>
-            
             {/* 报错按钮 */}
             <button
               onClick={() => setShowFeedback(true)}
