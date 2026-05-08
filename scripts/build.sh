@@ -2,9 +2,9 @@
 set -Eeuo pipefail
 
 echo "Installing dependencies..."
-npm install
+pnpm install
 
 echo "Building the Next.js project..."
-npm run build
+pnpm run build
 
 echo "Build completed successfully!"

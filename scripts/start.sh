@@ -2,18 +2,14 @@
 set -Eeuo pipefail
 
 COZE_WORKSPACE_PATH="${COZE_WORKSPACE_PATH:-$(pwd)}"
+cd "${COZE_WORKSPACE_PATH}"
 
-PORT=5000
-DEPLOY_RUN_PORT="${DEPLOY_RUN_PORT:-$PORT}"
+PORT="${DEPLOY_RUN_PORT:-5000}"
 
-# 加载环境变量
-export $(cat "${COZE_WORKSPACE_PATH}/.env.local" | grep -v '^#' | xargs) 2>/dev/null || true
+# 加载环境变量（如果存在）
+if [ -f .env.local ]; then
+    export $(cat .env.local | grep -v '^#' | xargs) 2>/dev/null || true
+fi
 
-start_service() {
-    cd "${COZE_WORKSPACE_PATH}"
-    echo "Starting HTTP service on port ${DEPLOY_RUN_PORT} for deploy..."
-    PORT=${DEPLOY_RUN_PORT} LARK_APP_ID="${LARK_APP_ID}" LARK_APP_SECRET="${LARK_APP_SECRET}" LARK_TABLE_TOKEN="${LARK_TABLE_TOKEN}" node dist/server.js
-}
-
-echo "Starting HTTP service on port ${DEPLOY_RUN_PORT} for deploy..."
-start_service
+echo "Starting HTTP service on port ${PORT} for deploy..."
+exec pnpm run start --port "${PORT}"

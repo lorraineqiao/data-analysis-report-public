@@ -63,3 +63,32 @@
 
 - 模板默认预装核心组件库 `shadcn/ui`，位于`src/components/ui/`目录下
 - Next.js 项目**必须默认**采用 shadcn/ui 组件、风格和规范，**除非用户指定用其他的组件和规范。**
+
+## 预览与部署配置
+
+### Coze 集成
+
+- 工作区根目录与项目根目录重合，均为 `/workspace/projects`
+- `.coze` 文件位于 `/workspace/projects/.coze`
+- 运行时要求：`nodejs-24`
+
+### 预览链路 [dev]
+
+- `dev.build`: `["bash", "./scripts/prepare.sh"]` - 安装依赖
+- `dev.run`: `["bash", "./scripts/dev.sh"]` - 启动开发服务器
+- 服务端口：5000（绑定 0.0.0.0）
+- 预览验证：`curl http://localhost:5000` 返回 200
+
+### 部署链路 [deploy]
+
+- `deploy.build`: `["bash", "./scripts/build.sh"]` - 构建 Next.js 应用
+- `deploy.run`: `["bash", "./scripts/start.sh"]` - 启动生产服务器
+- `deploy.profile.kind`: service
+- `deploy.profile.flavor`: web
+- 服务端口：5000
+
+### 脚本规范
+
+- 所有脚本使用 `pnpm`，禁止 npm/yarn
+- 端口固定为 5000
+- dev.sh 设置 `HOSTNAME=0.0.0.0` 确保 IPv4 全接口绑定
