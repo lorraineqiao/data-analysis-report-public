@@ -1527,16 +1527,15 @@ export default function AnalysisPage() {
               <span className="font-medium">报错</span>
             </button>
             
-            {/* 测试JSONBin记录按钮 */}
+            {/* 使用记录按钮 */}
             <button
-              onClick={async () => {
-                const res = await fetch('/api/test-jsonbin', { method: 'POST' });
-                const data = await res.json();
-
-              }}
-              className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+              onClick={() => window.open('/usage-records.html', '_blank')}
+              className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
             >
-              <span className="font-medium">测试记录</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <span className="font-medium">使用记录</span>
             </button>
           </div>
           
