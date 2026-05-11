@@ -87,7 +87,7 @@ export default function UserInfoModal({ isOpen, onClose, onSubmit }: UserInfoMod
           <button
             onClick={handleSubmit}
             disabled={!agentName.trim() || !managerName.trim()}
-            className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-4 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             开始分析
           </button>
