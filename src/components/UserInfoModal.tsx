@@ -6,23 +6,24 @@ import { X } from 'lucide-react'
 interface UserInfoModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (agentName: string, managerName: string) => void
+  onSubmit: (agentName: string, managerName: string, industry: string) => void
 }
 
 export default function UserInfoModal({ isOpen, onClose, onSubmit }: UserInfoModalProps) {
   const [agentName, setAgentName] = useState('')
   const [managerName, setManagerName] = useState('')
+  const [industry, setIndustry] = useState('')
 
   if (!isOpen) return null
 
   const handleSubmit = () => {
-    if (agentName.trim() && managerName.trim()) {
-      onSubmit(agentName.trim(), managerName.trim())
+    if (agentName.trim() && managerName.trim() && industry.trim()) {
+      onSubmit(agentName.trim(), managerName.trim(), industry.trim())
     }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && agentName.trim() && managerName.trim()) {
+    if (e.key === 'Enter' && agentName.trim() && managerName.trim() && industry.trim()) {
       handleSubmit()
     }
   }
@@ -59,6 +60,21 @@ export default function UserInfoModal({ isOpen, onClose, onSubmit }: UserInfoMod
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
               autoFocus
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              客户所属行业 <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
+            >
+              <option value="">请选择所属行业</option>
+              <option value="景区">景区</option>
+              <option value="餐饮">餐饮</option>
+            </select>
           </div>
 
           <div>
